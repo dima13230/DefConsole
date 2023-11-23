@@ -4,6 +4,21 @@ main_collection = /main/main.collectionc
 [script]
 shared_state = 1
 
+[druid]
+no_auto_input = 0
+no_stencil_check = 0
+no_auto_template = 0
+input_text = text
+input_touch = touch
+input_marked_text = marked_text
+input_key_esc = key_esc
+input_key_back = key_back
+input_key_enter = key_enter
+input_key_backspace = key_backspace
+input_multitouch = touch_multi
+input_scroll_up = mouse_wheel_up
+input_scroll_down = mouse_wheel_down
+
 [display]
 width = 960
 height = 640
@@ -15,6 +30,9 @@ input_method = HiddenInputField
 title = DefConsole
 dependencies#0 = https://github.com/Insality/druid/archive/refs/tags/0.11.0.zip
 
+[library]
+include_dirs = defconsole
+
 [input]
-game_binding = /builtins/input/all.input_bindingc
+game_binding = /input/game.input_bindingc
 

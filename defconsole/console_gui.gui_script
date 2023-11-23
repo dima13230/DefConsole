@@ -1,0 +1,46 @@
+local druid = require("druid.druid")
+
+local input = require("defconsole.console_input")
+local console = require("defconsole.console")
+
+function init(self)
+	self.druid = druid.new(self)
+
+	druid.register("input", input)
+
+	self.command_input = self.druid:new_input("command_box", "command_text")
+	self.output = gui.get_node("output_text")
+	self.output_buffer = ""
+end
+
+function final(self)
+	self.druid:final()
+end
+
+function update(self, dt)
+	self.druid:update(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("enable") then
+		self.command_input:select()
+	elseif message_id == hash("disable") then
+		self.command_input:unselect()
+	end
+	
+	self.druid:on_message(message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("key_enter") and action.pressed then
+		local result = console.evalString(self.command_input:get_text())
+		
+		self.output_buffer = self.output_buffer .. " > " .. self.command_input:get_text() .. "\n" .. ((result == nil) and "nil" or result) .. "\n"
+		gui.set_text(self.output, self.output_buffer)
+		self.command_input:set_text("")
+	elseif action.pressed then
+		self.command_input:select()
+	end
+	
+	return self.druid:on_input(action_id, action)
+end
