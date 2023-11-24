@@ -24,9 +24,9 @@ end
 function update(self, dt)
 	local wx, wy = window.get_size()
 
-	local command_box_position = gui.get_position(self.output_box_anchor)
+	local command_box_position = gui.get_screen_position(self.output_box_anchor)
 	command_box_position.y = wy
-	gui.set_position(self.output_box_anchor, command_box_position)
+	gui.set_screen_position(self.output_box_anchor, command_box_position)
 	
 	local command_box_size = gui.get_size(self.command_box)
 	command_box_size.x = wx
