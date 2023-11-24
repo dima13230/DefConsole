@@ -85,12 +85,20 @@ local function clear_and_select(self)
 	self:select()
 end
 
-local function set_cursor_position(self, position)
-	if self.cursor_position > string.len(self.value) then
-		self.cursor_position = string.len(self.value) 
-	elseif self.cursor_position < 0 then
+local function update_cursor_position(self)
+	self.update_cursor = true
+	self:set_text(self.value)
+end
+
+local function set_cursor_position(self, max_len, position)
+	if position < 0 then
 		self.cursor_position = 0
+	elseif position > max_len then
+		self.cursor_position = max_len
+	else
+		self.cursor_position = position
 	end
+	update_cursor_position(self)
 end
 
 --- Component style params.
@@ -190,10 +198,11 @@ function Input.on_input(self, action_id, action)
 			-- ignore arrow keys
 			if not utf8.match(hex, "EF9C8[0-3]") then
 				if not self.allowed_characters or utf8.match(action.text, self.allowed_characters) then
-					input_text = self.value .. action.text
+					input_text = console.insertString(self.value, action.text, self.cursor_position)
 					if self.max_length then
 						input_text = utf8.sub(input_text, 1, self.max_length)
 					end
+					set_cursor_position(self, string.len(input_text), self.cursor_position+1)
 				else
 					self.on_input_wrong:trigger(self:get_context(), action.text)
 					self.style.on_input_wrong(self, self.button.node)
@@ -207,22 +216,18 @@ function Input.on_input(self, action_id, action)
 			if self.max_length then
 				self.marked_value = utf8.sub(self.marked_value, 1, self.max_length)
 			end
+			set_cursor_position(self, string.len(input_text)+string.len(self.marked_value), self.cursor_position+1)
 		end
 
 		if action_id == const.ACTION_BACKSPACE and (action.pressed or action.repeated) then
-			input_text = utf8.sub(self.value, 1, -2)
+			--input_text = utf8.sub(self.value, 1, -2)
+			input_text = console.stringRemoveAt(self.value, self.cursor_position)
+			set_cursor_position(self, string.len(input_text)+string.len(self.marked_value), self.cursor_position-1)
 		end
 
 		if action_id == const.ACTION_BACK and action.released then
 			self:unselect()
 			return true
-		end
-
-		if action_id == hash(my_const.ACTION_LEFT_ARROW) and (action.pressed or action.repeated) then
-			set_cursor_position(self, self.cursor_position - 1)
-		elseif action_id == hash(my_const.ACTION_RIGHT_ARROW) and (action.pressed or action.repeated) then
-			print("he")
-			set_cursor_position(self, self.cursor_position + 1)
 		end
 		
 		if action_id == const.ACTION_ESC and action.released then
@@ -230,6 +235,16 @@ function Input.on_input(self, action_id, action)
 			return true
 		end
 
+		if action_id == hash(my_const.ACTION_LEFT_ARROW) and (action.pressed or action.repeated) then
+			set_cursor_position(self, string.len(self.value), self.cursor_position - 1)
+			self:set_text(self.value)
+			return true
+		elseif action_id == hash(my_const.ACTION_RIGHT_ARROW) and (action.pressed or action.repeated) then
+			set_cursor_position(self, string.len(self.value), self.cursor_position + 1)
+			self:set_text(self.value)
+			return true
+		end
+		
 		if input_text or #self.marked_value > 0 then
 			self:set_text(input_text)
 			return true
@@ -250,7 +265,6 @@ function Input.on_input_interrupt(self)
 	-- self:unselect()
 end
 
-
 --- Set text for input field
 -- @tparam Input self @{Input}
 -- @tparam string input_text The string to apply for input field
@@ -263,7 +277,8 @@ function Input.set_text(self, input_text)
 	-- Only update the text if it has changed
 	local current_value = self.value .. self.marked_value
 
-	if current_value ~= self.current_value then
+	if current_value ~= self.current_value or self.update_cursor then
+		self.update_cursor = false
 		self.current_value = current_value
 
 		-- mask text if password field
