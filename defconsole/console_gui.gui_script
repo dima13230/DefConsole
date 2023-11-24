@@ -14,6 +14,7 @@ function init(self)
 
 	self.command_box = gui.get_node("command_box")
 	self.output_box = gui.get_node("output_box")
+	self.output_box_anchor = gui.get_node("command_output")
 end
 
 function final(self)
@@ -21,14 +22,18 @@ function final(self)
 end
 
 function update(self, dt)
-	self.wx, self.wy = window.get_size()
+	local wx, wy = window.get_size()
+
+	local command_box_position = gui.get_position(self.output_box_anchor)
+	command_box_position.y = wy
+	gui.set_position(self.output_box_anchor, command_box_position)
 	
 	local command_box_size = gui.get_size(self.command_box)
-	command_box_size.x = self.wx
+	command_box_size.x = wx
 	gui.set_size(self.command_box, command_box_size)
 
 	local output_box_size = gui.get_size(self.output_box)
-	output_box_size.x = self.wx
+	output_box_size.x = wx
 	gui.set_size(self.output_box, output_box_size)
 	
 	self.druid:update(dt)
