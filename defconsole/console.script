@@ -1,6 +1,7 @@
 function set_console_state(self, enabled)
 	self.active = enabled
 	msg.post("console", self.active and "enable" or "disable")
+	if self.active then msg.post(".", "acquire_input_focus") end
 end
 
 function init(self)
