@@ -1,4 +1,4 @@
-name: "main"
+name: "console"
 scale_along_z: 0
 embedded_instances {
   id: "console"
@@ -21,7 +21,7 @@ embedded_instances {
   "}\n"
   "components {\n"
   "  id: \"main\"\n"
-  "  component: \"/main/main.script\"\n"
+  "  component: \"/defconsole/console.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"

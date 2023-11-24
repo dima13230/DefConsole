@@ -1,7 +1,7 @@
 local druid = require("druid.druid")
 
 local input = require("defconsole.console_input")
-local console = require("defconsole.console")
+local console = require("defconsole.console_module")
 
 function init(self)
 	self.druid = druid.new(self)
