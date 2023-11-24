@@ -58,6 +58,9 @@ local utf8 = utf8 or utf8_lua
 
 local Input = component.create("input")
 
+local console = require("defconsole.console_module")
+local my_const = require("defconsole.my_const")
+
 
 --- Mask text by replacing every character with a mask character
 -- @tparam string text
@@ -82,6 +85,13 @@ local function clear_and_select(self)
 	self:select()
 end
 
+local function set_cursor_position(self, position)
+	if self.cursor_position > string.len(self.value) then
+		self.cursor_position = string.len(self.value) 
+	elseif self.cursor_position < 0 then
+		self.cursor_position = 0
+	end
+end
 
 --- Component style params.
 -- You can override this component styles params in druid styles table
@@ -140,6 +150,7 @@ function Input.init(self, click_node, text_node, keyboard_type)
 	self.market_text_width = 0
 	self.total_width = 0
 
+	self.cursor_position = string.len(self.value)
 	self.max_length = nil
 	self.allowed_characters = nil
 
@@ -207,6 +218,13 @@ function Input.on_input(self, action_id, action)
 			return true
 		end
 
+		if action_id == hash(my_const.ACTION_LEFT_ARROW) and (action.pressed or action.repeated) then
+			set_cursor_position(self, self.cursor_position - 1)
+		elseif action_id == hash(my_const.ACTION_RIGHT_ARROW) and (action.pressed or action.repeated) then
+			print("he")
+			set_cursor_position(self, self.cursor_position + 1)
+		end
+		
 		if action_id == const.ACTION_ESC and action.released then
 			self:unselect()
 			return true
@@ -261,8 +279,8 @@ function Input.set_text(self, input_text)
 		local marked_value = masked_marked_value or self.marked_value
 		self.is_empty = #value == 0 and #marked_value == 0
 
-		local final_text = value .. marked_value .. "|"
-		self.text:set_to(final_text)
+		local final_text = value .. marked_value
+		self.text:set_to(console.insertString(final_text, "|", self.cursor_position))
 
 		-- measure it
 		self.text_width = self.text:get_text_size(value)

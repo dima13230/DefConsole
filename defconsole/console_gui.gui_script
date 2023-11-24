@@ -2,6 +2,7 @@ local druid = require("druid.druid")
 
 local input = require("defconsole.console_input")
 local console = require("defconsole.console_module")
+local console_style = require("defconsole.console_style")
 
 function init(self)
 	self.druid = druid.new(self)
@@ -9,6 +10,8 @@ function init(self)
 	druid.register("input", input)
 
 	self.command_input = self.druid:new_input("command_box", "command_text")
+	self.command_input:set_style(console_style)
+	
 	self.output = gui.get_node("output_text")
 	self.output_buffer = ""
 
