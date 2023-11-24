@@ -11,6 +11,9 @@ function init(self)
 	self.command_input = self.druid:new_input("command_box", "command_text")
 	self.output = gui.get_node("output_text")
 	self.output_buffer = ""
+
+	self.command_box = gui.get_node("command_box")
+	self.output_box = gui.get_node("output_box")
 end
 
 function final(self)
@@ -18,6 +21,16 @@ function final(self)
 end
 
 function update(self, dt)
+	self.wx, self.wy = window.get_size()
+	
+	local command_box_size = gui.get_size(self.command_box)
+	command_box_size.x = self.wx
+	gui.set_size(self.command_box, command_box_size)
+
+	local output_box_size = gui.get_size(self.output_box)
+	output_box_size.x = self.wx
+	gui.set_size(self.output_box, output_box_size)
+	
 	self.druid:update(dt)
 end
 
