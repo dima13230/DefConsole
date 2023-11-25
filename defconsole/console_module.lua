@@ -1,5 +1,7 @@
 local console = {}
 
+ext = {exit=sys.exit}
+
 console.preloaded_code = ""
 
 function console.stringRemoveAt(str, pos)

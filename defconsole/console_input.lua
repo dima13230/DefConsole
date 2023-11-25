@@ -185,9 +185,10 @@ end
 function Input.on_input(self, action_id, action)
 	if self.is_selected then
 		local input_text = nil
+		
 		if action_id == const.ACTION_TEXT then
 			-- ignore return key
-			if action.text == "\n" or action.text == "\r" then
+			if action.text == "\n" or action.text == "\r" or action.text == "`" then
 				return true
 			end
 
