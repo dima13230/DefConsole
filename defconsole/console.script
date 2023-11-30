@@ -1,16 +1,49 @@
+local console = require("defconsole.console_module")
+
 function set_console_state(self, enabled)
 	self.active = enabled
-	msg.post("console", self.active and "enable" or "disable")
+	--msg.post("console", self.active and "enable" or "disable")
 	if self.active then msg.post(".", "acquire_input_focus") end
 end
 
 function init(self)
+	self.output_buffer = ""
+	imgui.set_ini_filename()
+
+	
+	imgui.set_style_window_rounding(6)
+	imgui.set_style_frame_rounding(3)
+	imgui.set_style_scrollbar_rounding(10)
+	imgui.set_style_scrollbar_size(10)
+	imgui.set_next_window_size(300, 300)
+
+	local scale = 2
+	imgui.scale_all_sizes(scale)
+	
 	msg.post(".", "acquire_input_focus")
 	set_console_state(self, false)
 end
 
+function update(self, dt)
+	if self.active then
+		imgui.begin_window("Console", nil, imgui.WINDOWFLAGS_MENUBAR)
+		--imgui.begin_child("")
+			imgui.text(self.output_buffer)
+		--imgui.end_child()
+		local changed, value = imgui.input_text("", self.command or "")
+		if changed then
+			self.command = value
+		end
+		imgui.end_window()
+	end
+end	
+
 function on_input(self, action_id, action)
 	if action_id == hash("console_toggle") and action.pressed then
 		set_console_state(self, not self.active)
+	elseif action_id == hash("key_enter") and action.pressed then
+		local result = console.evalString(self.command)
+		self.output_buffer = self.output_buffer .. " > " .. self.command .. "\n" .. ((result == nil) and "nil" or result) .. "\n"
+		self.command = ""
 	end
 end
