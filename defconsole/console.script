@@ -26,14 +26,22 @@ end
 
 function update(self, dt)
 	if self.active then
+		local wx, wy = imgui.get_window_size()
 		imgui.begin_window("Console", nil, imgui.WINDOWFLAGS_MENUBAR)
-		--imgui.begin_child("")
+		imgui.begin_child("", wx, wy)
 			imgui.text(self.output_buffer)
-		--imgui.end_child()
-		local changed, value = imgui.input_text("", self.command or "")
+		imgui.end_child()
+
+		imgui.push_item_width(-1)
+		
+		--imgui.push_id(self.command)
+		local changed, value = imgui.input_text("##command", self.command or "")
 		if changed then
 			self.command = value
 		end
+		--imgui.pop_id()
+		
+		imgui.pop_item_width()
 		imgui.end_window()
 	end
 end	
