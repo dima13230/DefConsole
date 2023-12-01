@@ -1,13 +1,22 @@
-# Welcome to Defold
 
-This project was created from the "empty" project template.
+# DefConsole
 
-The settings in ["game.project"](defold://open?path=/game.project) are all the default. A bootstrap empty ["main.collection"](defold://open?path=/main/main.collection) is included.
+DefConsole is an in-game debugging console for Defold Engine made with ImGUI.
 
-Check out [the documentation pages](https://defold.com/learn) for examples, tutorials, manuals and API docs.
+![Example](images/image1.png)
 
-If you run into trouble, help is available in [our forum](https://forum.defold.com).
+## Setup
 
-Happy Defolding!
+### Dependency
 
+To integrate the **DefConsole** extension into your project, add this project as a [dependency](https://www.defold.com/manuals/libraries/) in your **Defold** game. Open your `game.project` file and add the following line to the dependencies field under the project section:
+
+> [https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip](https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip)
+
+## Usage
+
+To use the **DefConsole** simply add the
+> defconsole/console.collection
+
+To your scene. Since then while in game you can press the corresponding button to toggle console.
 ---
