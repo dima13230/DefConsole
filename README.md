@@ -28,4 +28,13 @@ To your scene. Then add the `console_toggle` in your input bindings with the but
 - [ ] Auto scrolling of console output
 - [ ] Save story of commands and use up/down arrows to restore them into the input field
 
+## Contributions & Sponsors
+
+Any contributions or sponsorships are welcome. Although all contributors will be shown in special section by GitHub itself, I'll maintain here a list of top contributors as well as full list of sponsors (if sponsors desire so).
+
+USDT TRC20:
+> TESXiLVwPrgDqWvPSYfU4pXKc7gTaXcvVE
+
+[ЮMoney](https://yoomoney.ru/to/4100116685386196)
+
 ---
