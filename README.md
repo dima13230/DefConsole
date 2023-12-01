@@ -23,6 +23,19 @@ To use the **DefConsole** add the
 
 To your scene. Then add the `console_toggle` in your input bindings with the button you want to be able to toggle console with.
 
+You can add your own functions and variables to be available in the console. Here's an example of how to do that:
+```lua
+local console = require("defconsole.console_module")
+
+-- Console commands extension
+function message(object, id)
+	msg.post("level_holder:/collection0/" .. object, id)
+end
+ext.message=message
+```
+Then you can type this in the console:
+`ext.message("door", "open")`
+
 ## TODO
 
 - [ ] Auto scrolling of console output
