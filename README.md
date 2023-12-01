@@ -36,6 +36,8 @@ ext.message=message
 Then you can type this in the console:
 `ext.message("door", "open")`
 
+`ext` is a table defined inside the `console_module` and is guaranteed to be in the console's scope. 
+
 ## TODO
 
 - [ ] Fix error handling for attempts to call non-existent methods in console
