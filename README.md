@@ -38,6 +38,7 @@ Then you can type this in the console:
 
 ## TODO
 
+- [ ] Fix error handling for attempts to call non-existent methods in console
 - [ ] Auto scrolling of console output
 - [ ] Save story of commands and use up/down arrows to restore them into the input field
 
