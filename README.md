@@ -42,8 +42,8 @@ Then you can type this in the console:
 
 - [ ] Fix error handling for attempts to call non-existent methods in console
 - [ ] Rewrite input_text handling using callbacks to be able to manipulate it more elegantly (and fix the bug with keyboard cursor going to the beginning of input_text after history traversal)
-- [*] Auto scrolling of console output
-- [*] Save story of commands and use up/down arrows to restore them into the input field
+- [x] Auto scrolling of console output
+- [x] Save story of commands and use up/down arrows to restore them into the input field
 
 ## Contributions & Sponsors
 
