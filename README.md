@@ -17,8 +17,8 @@ To use the **DefConsole** with latest (but probably unstable or broken) features
 
 > [https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip](https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip)
 
-**DefConsole** depends on ImGUI extension for Defold Engine and to use it you have to also add ImGUI extension into your project dependencies. Currently, **DefConsole** uses my own fork of this extension with a bit of functionality added to it (although I already made a pull request to the base repo), so to be able to use this extension add following line to the dependencies field as well:
-> [https://github.com/dima13230/extension-imgui/archive/refs/heads/master.zip](https://github.com/dima13230/extension-imgui/archive/refs/heads/master.zip)
+**DefConsole** depends on ImGUI extension for Defold Engine and to use it you have to also add ImGUI extension into your project dependencies:
+> [https://github.com/britzl/extension-imgui/archive/refs/tags/1.3.0.zip](https://github.com/britzl/extension-imgui/archive/refs/tags/1.3.0.zip)
 
 ## Usage
 
