@@ -28,7 +28,7 @@ input_method = HiddenInputField
 
 [project]
 title = DefConsole
-dependencies#0 = https://github.com/dima13230/extension-imgui/archive/refs/heads/master.zip
+dependencies#0 = https://github.com/britzl/extension-imgui/archive/refs/tags/1.3.0.zip
 
 [library]
 include_dirs = defconsole

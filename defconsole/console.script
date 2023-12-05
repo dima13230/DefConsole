@@ -9,7 +9,10 @@ function set_console_state(self, enabled)
 end
 
 function init(self)
+	self.command = ""
 	self.output_buffer = ""
+	self.commands_history = {}
+	self.commands_history_index = 0 -- to extract command from the history at specific index when the arrow key is pressed
 	self.activated_command_input_focus = false
 	self.had_first_update = false -- had to track this because set_keyboard_focus_here doesn't work on very first update of imgui
 	imgui.set_ini_filename()
@@ -33,19 +36,31 @@ function update(self, dt)
 		imgui.begin_window("Console", nil, imgui.WINDOWFLAGS_MENUBAR)
 		imgui.begin_child("", wx, wy)
 			imgui.text(self.output_buffer)
+			if self.scroll_to_bottom then
+				imgui.set_scroll_here_y(1)
+				self.scroll_to_bottom = false
+			end	
 		imgui.end_child()
 
 		imgui.push_item_width(-1)
-		if (not self.activated_command_input_focus or self.return_command) and self.had_first_update then
+		if (not self.activated_command_input_focus or self.command_changed) and self.had_first_update then
 			imgui.set_keyboard_focus_here(0) -- doesn't work on very first update?
 			self.activated_command_input_focus = true
 		end
-		local changed, value = imgui.input_text("##command", self.command or "")
-		if changed and not self.return_command then
-			self.command = value
-		elseif self.return_command then
-			self.return_command = false
+
+		-- This mess might be fixed using callbacks, which are not yet supported by imgui_extension. With this way of doing this keyboard cursor
+		-- also moves to the beginning of the input_text everytime user would traverse through the history and I cannot move cursor to the end
+		-- without callback either
+		if not self.command_changed then
+			local changed, value = imgui.input_text("##command", self.command)
+			if changed then
+				self.command = value
+			end
+		else
+			local changed, value = imgui.input_text("##command", self.command, imgui.INPUTFLAGS_READONLY)
+			self.command_changed = false
 		end
+		
 		imgui.pop_item_width()
 		imgui.end_window()
 
@@ -61,7 +76,23 @@ function on_input(self, action_id, action)
 	elseif action_id == hash("key_enter") and action.pressed then
 		local result = console.evalString(self.command)
 		self.output_buffer = self.output_buffer .. " > " .. self.command .. "\n" .. ((result == nil) and "nil" or result) .. "\n"
+		self.scroll_to_bottom = true
+		table.insert(self.commands_history, self.command)
 		self.command = ""
-		self.return_command = true
+		self.command_changed = true
+	elseif action_id == hash("key_up") and action.pressed and #self.commands_history > 0 then
+		self.commands_history_index = self.commands_history_index - 1
+		if self.commands_history_index < 1 then
+			self.commands_history_index = #self.commands_history
+		end
+		self.command = self.commands_history[self.commands_history_index]
+		self.command_changed = true
+	elseif action_id == hash("key_down") and action.pressed and #self.commands_history > 0 then
+		self.commands_history_index = self.commands_history_index + 1
+		if self.commands_history_index > #self.commands_history then
+			self.commands_history_index = 1
+		end
+		self.command = self.commands_history[self.commands_history_index]
+		self.command_changed = true
 	end
 end
