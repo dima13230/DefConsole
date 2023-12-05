@@ -39,7 +39,7 @@ function update(self, dt)
 			if self.scroll_to_bottom then
 				imgui.set_scroll_here_y(1)
 				self.scroll_to_bottom = false
-			end	
+			end
 		imgui.end_child()
 
 		imgui.push_item_width(-1)
@@ -80,6 +80,7 @@ function on_input(self, action_id, action)
 		table.insert(self.commands_history, self.command)
 		self.command = ""
 		self.command_changed = true
+		self.commands_history_index = 1
 	elseif action_id == hash("key_up") and action.pressed and #self.commands_history > 0 then
 		self.commands_history_index = self.commands_history_index - 1
 		if self.commands_history_index < 1 then
