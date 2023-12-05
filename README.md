@@ -9,9 +9,13 @@ DefConsole is an in-game debugging console for Defold Engine made with ImGUI.
 
 ### Dependency
 
-To integrate the **DefConsole** extension into your project, add this project as a [dependency](https://www.defold.com/manuals/libraries/) in your **Defold** game. Open your `game.project` file and add the following line to the dependencies field under the project section:
+To integrate the **DefConsole** extension into your project, add this project as a [dependency](https://www.defold.com/manuals/libraries/) in your **Defold** game. Open your `game.project` file and add the following line to the dependencies field under the project section to use latest release:
 
 > [https://github.com/dima13230/DefConsole/archive/refs/tags/v0.1.zip](https://github.com/dima13230/DefConsole/archive/refs/tags/v0.1.zip)
+
+To use the **DefConsole** with latest (but probably unstable or broken) features, you can instead add the following line to the dependencies field under the project section:
+
+> [https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip](https://github.com/dima13230/DefConsole/archive/refs/heads/imgui.zip)
 
 **DefConsole** depends on ImGUI extension for Defold Engine and to use it you have to also add ImGUI extension into your project dependencies. Currently, **DefConsole** uses my own fork of this extension with a bit of functionality added to it (although I already made a pull request to the base repo), so to be able to use this extension add following line to the dependencies field as well:
 > [https://github.com/dima13230/extension-imgui/archive/refs/heads/master.zip](https://github.com/dima13230/extension-imgui/archive/refs/heads/master.zip)
