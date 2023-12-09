@@ -1,8 +1,8 @@
 local console = require("defconsole.console_module")
 
 function set_console_state(self, enabled)
-	self.active = enabled
-	if self.active then
+	console.active = enabled
+	if console.active then
 		msg.post(".", "acquire_input_focus")
 		self.activated_command_input_focus = false
 	 end
@@ -31,7 +31,7 @@ function init(self)
 end
 
 function update(self, dt)
-	if self.active then
+	if console.active then
 		local wx, wy = imgui.get_window_size()
 		imgui.begin_window("Console", nil, imgui.WINDOWFLAGS_MENUBAR)
 		imgui.begin_child("", wx, wy)
@@ -72,8 +72,13 @@ end
 
 function on_input(self, action_id, action)
 	if action_id == hash("console_toggle") and action.pressed then
-		set_console_state(self, not self.active)
-	elseif action_id == hash("key_enter") and action.pressed then
+		set_console_state(self, not console.active)
+	
+	if not console.active then
+		return
+	end
+	
+	if action_id == hash("key_enter") and action.pressed then
 		local result = console.evalString(self.command)
 		self.output_buffer = self.output_buffer .. " > " .. self.command .. "\n" .. ((result == nil) and "nil" or result) .. "\n"
 		self.scroll_to_bottom = true
