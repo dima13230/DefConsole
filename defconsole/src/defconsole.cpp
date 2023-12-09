@@ -4,6 +4,17 @@
 // include the Defold SDK
 #include <dmsdk/sdk.h>
 
+static void LuaInit(lua_State* L)
+{
+    int top = lua_gettop(L);
+
+    // Register lua names
+    luaL_register(L, MODULE_NAME, Module_methods);
+
+    lua_pop(L, 1);
+    assert(top == lua_gettop(L));
+}
+
 dmExtension::Result AppInitializeMyExtension(dmExtension::AppParams* params)
 {
     return dmExtension::RESULT_OK;
