@@ -73,6 +73,7 @@ end
 function on_input(self, action_id, action)
 	if action_id == hash("console_toggle") and action.pressed then
 		set_console_state(self, not console.active)
+	end
 	
 	if not console.active then
 		return
