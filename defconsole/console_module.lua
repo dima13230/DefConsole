@@ -13,7 +13,7 @@ function console.insertString(str1, str2, pos)
 end
 
 function console.evalString(str)
-	local status, result = pcall(loadstring, "return "..str)
+	local status, result = pcall(loadstring, console.preloaded_code .. "\nreturn "..str)
 	if status then
 		if result == nil then
 			return "Syntax or other error in the code"
