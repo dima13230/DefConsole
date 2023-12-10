@@ -37,10 +37,15 @@ function message(object, id)
 end
 ext.message=message
 ```
+
 Then you can type this in the console:
 `ext.message("door", "open")`
 
 `ext` is a table defined inside the `console_module` and is guaranteed to be in the console's scope. 
+
+Alternatively to `console_toggle` input binding, you can toggle console through your code by changing the value of boolean `console.active` as well as check if the console is enabled using this variable.
+
+Console outputs engine logs by default. This can be disabled by setting `console.output_logs` to false.
 
 ## TODO
 
