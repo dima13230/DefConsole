@@ -8,12 +8,21 @@ function set_console_state(self, enabled)
 	 end
 end
 
+function log_callback(self, domain, message)
+	if self.output_logs then
+		self.output_buffer = self.output_buffer .. message
+	end
+end
+
 function init(self)
+	defconsole.init(log_callback)
+
 	self.command = ""
 	self.output_buffer = ""
 	self.commands_history = {}
 	self.commands_history_index = 0 -- to extract command from the history at specific index when the arrow key is pressed
 	self.activated_command_input_focus = false
+	self.output_logs = true
 	self.had_first_update = false -- had to track this because set_keyboard_focus_here doesn't work on very first update of imgui
 	imgui.set_ini_filename()
 	

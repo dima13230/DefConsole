@@ -3,46 +3,52 @@
 
 // include the Defold SDK
 #include <dmsdk/sdk.h>
+#include <dmsdk/dlib/log.h>
 
-static int Reverse(lua_State* L)
+dmScript::LuaCallbackInfo* log_callback;
+
+static void InvokeCallback(dmScript::LuaCallbackInfo* cbk, const char* domain, const char* message)
 {
-    // The number of expected items to be on the Lua stack
-    // once this struct goes out of scope
-    DM_LUA_STACK_CHECK(L, 1);
-
-    // Check and get parameter string from stack
-    char* str = (char*)luaL_checkstring(L, 1);
-
-    // Reverse the string
-    int len = strlen(str);
-    for(int i = 0; i < len / 2; i++) {
-        const char a = str[i];
-        const char b = str[len - i - 1];
-        str[i] = b;
-        str[len - i - 1] = a;
+    if (!dmScript::IsCallbackValid(cbk)) return;
+    lua_State* L = dmScript::GetCallbackLuaContext(cbk);
+    DM_LUA_STACK_CHECK(L, 0);
+    if (!dmScript::SetupCallback(cbk))
+    {
+        dmLogError("Failed to setup callback");
+        return;
     }
+    lua_pushstring(L, domain);
+    lua_pushstring(L, message);
+    dmScript::PCall(L, 3, 0);       // instance + 2
+    dmScript::TeardownCallback(cbk);
+}
 
-    // Put the reverse string on the stack
-    lua_pushstring(L, str);
+static void LogCallback(LogSeverity severity, const char* domain, const char* formattedString)
+{
+    InvokeCallback(log_callback, domain, formattedString);
+}
 
-    // Return 1 item
-    return 1;
+static int Init(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    
+    log_callback = dmScript::CreateCallback(L, 1);
+    
+    return 0;
 }
 
 // Functions exposed to Lua
 static const luaL_reg Module_methods[] =
 {
-    {"reverse", Reverse},
+    {"init", Init},
     {0, 0}
 };
 
 static void LuaInit(lua_State* L)
 {
     int top = lua_gettop(L);
-
     // Register lua names
     luaL_register(L, MODULE_NAME, Module_methods);
-
     lua_pop(L, 1);
     assert(top == lua_gettop(L));
 }
@@ -53,9 +59,12 @@ dmExtension::Result AppInitializeMyExtension(dmExtension::AppParams* params)
 }
 
 dmExtension::Result InitializeMyExtension(dmExtension::Params* params)
-{
+{   
     // Init Lua
     LuaInit(params->m_L);
+
+    dmLogRegisterListener(LogCallback);
+    
     printf("Registered %s Extension\n", MODULE_NAME);
     return dmExtension::RESULT_OK;
 }
