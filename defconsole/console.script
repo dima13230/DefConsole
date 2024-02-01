@@ -17,7 +17,7 @@ function log_callback(self, domain, message)
 end
 
 function init(self)
-	defconsole.init(log_callback)
+	--defconsole.init(log_callback)
 
 	console.output_logs = self.output_logs
 

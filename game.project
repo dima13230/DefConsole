@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /example/main.collectionc
+main_collection = /defconsole/console.collectionc
 
 [script]
 shared_state = 1
