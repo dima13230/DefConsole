@@ -30,9 +30,9 @@ static void LogCallback(LogSeverity severity, const char* domain, const char* fo
 
 static int Init(lua_State* L)
 {
-    DM_LUA_STACK_CHECK(L, 0);
+    //DM_LUA_STACK_CHECK(L, 0);
     
-    log_callback = dmScript::CreateCallback(L, 1);
+    //log_callback = dmScript::CreateCallback(L, 1);
     
     return 0;
 }
@@ -46,11 +46,11 @@ static const luaL_reg Module_methods[] =
 
 static void LuaInit(lua_State* L)
 {
-    int top = lua_gettop(L);
+    //int top = lua_gettop(L);
     // Register lua names
-    luaL_register(L, MODULE_NAME, Module_methods);
-    lua_pop(L, 1);
-    assert(top == lua_gettop(L));
+    //luaL_register(L, MODULE_NAME, Module_methods);
+    //lua_pop(L, 1);
+    //assert(top == lua_gettop(L));
 }
 
 dmExtension::Result AppInitializeMyExtension(dmExtension::AppParams* params)
